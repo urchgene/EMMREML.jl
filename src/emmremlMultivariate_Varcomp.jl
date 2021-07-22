@@ -89,14 +89,24 @@ function emmremlMultivariate(Y, X, Z, K)
     end
 
     h2 = diag(Vgt ./ (Vgt + Vet))
+     
+    #### calculate loglik 
 
+    n = size(Y', 1)
+    ZKZt = Z*K*Z'
+    R = zeros(n,n) + I; R = kron(R, Vet);
+    V = R + kron(ZKZt, Vgt)
+    XB = X'*Bt;
+    LL = MvNormal(vec(XB), Symmetric(V));
+    loglik = logpdf(LL, vec(Y));
 
     ### Write ouput in R for pretty compatible format
     
     m11 =  Dict(
 			:Vg => Vgt,
 			:Ve => Vet,
-			:h2 => h2)
+			:h2 => h2,
+	                :loglik => loglik)
 
     return(m11)
 
