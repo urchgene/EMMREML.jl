@@ -8,7 +8,7 @@
 
 
 using LinearAlgebra;
-#using RCall;
+using Distributions;
 using Statistics;
 
 #BLAS.set_num_threads(20)
