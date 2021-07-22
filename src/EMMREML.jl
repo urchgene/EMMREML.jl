@@ -1,7 +1,7 @@
 module EMMREML
 
 using Optim;
-using Statistics;
+using Statistics, Distributions;
 using ForwardDiff, PositiveFactorizations;
 using LinearAlgebra, DataFrames;
 
