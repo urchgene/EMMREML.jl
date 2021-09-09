@@ -89,3 +89,33 @@ function GRMiter(M, pieces)
        return(G)
 
 end
+
+
+### Calculate GRM weighted by SNP variances for large data
+### computation of large SNP data in pieces
+function GRMVariter(M, pieces)
+	
+       scale(X, d) = (X .- (2 .* d)) ./ sqrt.(d)
+
+       series = collect(1:size(M,2));
+       xx = Iterators.partition(series, pieces) |> collect;
+
+       f = 0.0;
+       G = zeros(size(M,1), size(M,1));
+
+       for i=1:length(xx)
+
+       MM = Matrix(M[:, xx[i]])  ## extract column of iterator
+       P = mean(MM, dims=1) ./2
+       A = scale(MM, P);
+       K = (A * A');
+       G = G + K;
+       end
+	
+       G = 0.99*G + 0.01*I;
+
+       return(G)
+
+end
+
+
