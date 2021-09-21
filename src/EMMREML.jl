@@ -3,7 +3,7 @@ module EMMREML
 using Optim;
 using Statistics, Distributions;
 using ForwardDiff, PositiveFactorizations;
-using LinearAlgebra, DataFrames;
+using LinearAlgebra, DataFrames, InvertedIndices, PedigreeBase;
 
 include("emmremlJulia.jl")
 include("emmremlMultivariate_Varcomp.jl")
