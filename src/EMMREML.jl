@@ -13,7 +13,7 @@ include("makeRKHS.jl")
 
 export emmreml, emmremlMultivariate
 export GRM, GRMinv, RKHS, RKHSinv, SqEuclid
-export GRMwted, GRMwtedinv, GRMiter, GRMVariter
+export GRMwted, GRMwtedinv, GRMiter, GRMVariter, DOM
 #export emmreml_LU
 
 end # module
