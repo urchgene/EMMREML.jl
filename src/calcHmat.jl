@@ -42,8 +42,10 @@ function Hmat(tau, omega, pedfilePath; input="input.Rdata", wtedG=false)
            G =  GRM(M); @rput G;
         end
 
-        R"colnames(G) <- rownames(G) <- idG";
-        R"G22 <- G[idH[-(index)], idH[-(index)]]"; @rget G22;
+        #R"colnames(G) <- rownames(G) <- idG";
+        G = NamedArray(G, (idG, idG));
+        #R"G22 <- G[idH[-(index)], idH[-(index)]]"; @rget G22;
+        G22 = G[idH[Not(index)], idH[Not(index)]]
 
         A22inv = pinv(A22);
         G22inv = pinv(G22);
