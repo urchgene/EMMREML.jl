@@ -57,6 +57,6 @@ function Hmat(tau, omega, pedfilePath; input="input.Rdata", wtedG=false)
         H = A + hcat(vcat(H11, H21), vcat(H12, H22));
         H = NamedArray(H, (idH, idH));
 
-        return(H)
+        return(Dict(:H => H,:names => idH))
 
 end
