@@ -37,9 +37,9 @@ function Hmat(tau, omega, pedfilePath; input="input.Rdata", wtedG=false)
         #### Do wted G or not ######
 
         if wtedG == true
-           @rget D; G = GRMwted(M, D); @rput G;
+           @rget D; M = Matrix(M); G = GRMwted(M, D); @rput G;
         else 
-           G =  GRM(M); @rput G;
+           M = Matrix(M); G =  GRM(M); @rput G;
         end
 
         #R"colnames(G) <- rownames(G) <- idG";
