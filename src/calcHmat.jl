@@ -69,7 +69,7 @@ function Hmat(tau, omega; input="input.Rdata", wtedG=false)
         R"idH <- unique(c(idG, idA))"; R"idH <- rev(idH)";
         @rget idH; 
         #R"A <- as.matrix(A); A <- A[idH, idH];"; @rget A;
-        A = NamedArray(A, (idA, idA)); A = A[idH, idH];
+        A = A[idH, idH];
         R"index = which(is.na(match(idH, idG)))"; @rget index;
         A11 = A[index, index];
         A12 = A[index, Not(index)];
