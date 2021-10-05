@@ -57,10 +57,11 @@ function Hmat(tau, omega; input="input.Rdata", wtedG=false)
         #R"idA <- names(xx)[which(xx == 1) : length(xx)]";
         #@rget idA;
         
-        @rget ped; 
+        @rget ped; @rget pednames; @rget pednum;
+        idA = pednames;
         
         A = computeA(ped[:,1], ped[:,2], ped[:, 3])
-        
+        A = NamedArray(A, (idA, idA));
 
 
         @rget M;
