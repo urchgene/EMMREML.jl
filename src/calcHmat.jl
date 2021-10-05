@@ -4,7 +4,43 @@
 using RCall, LinearAlgebra, InvertedIndices
 using EMMREML, PedigreeBase, NamedArrays
 
-function Hmat(tau, omega, pedfilePath; input="input.Rdata", wtedG=false) 
+
+##### Calculate NRM from numeric pedigree
+#### All missing must be 0
+
+function computeA(Progeny, Sire, Dam)
+
+  n = length(Progeny);
+  A = Diagonal(n);
+
+for i in 1:n
+
+	if (Sire[i] == 0 && Dam[i] != 0)
+    	for j in 1:(i-1)
+        A[i, j] = A[j, i] = 0.5 * (A[j, Dam[i]]) 
+        end
+
+	elseif (Sire[i] != 0 && Dam[i] == 0)
+        for j in 1:(i-1)
+        A[i, j] = A[j, i] = 0.5 * (A[j, Sire[i]]) 
+        end
+
+    else (Sire[i] != 0 && Dam[i] != 0)
+        for j in 1:(i-1)
+        A[i, j] = A[j, i] = 0.5 * (A[j, Sire[i]] + A[j, Dam[i]]) 
+        end
+
+        A[i, i] = A[i, i] + 0.5 * (A[Sire[i], Dam[i]])
+    end
+
+end
+
+  return(A)
+
+end
+
+
+function Hmat(tau, omega; input="input.Rdata", wtedG=false) 
 
 ## Amat & input are paths to their Rdata locations
 
@@ -12,14 +48,19 @@ function Hmat(tau, omega, pedfilePath; input="input.Rdata", wtedG=false)
         R"load(input)";
         
         ### pedfilePath must be full Path where ped is located. File must have no column names
-        pedlist,idtable = read_ped(pedfilePath);
-        A = get_nrm(pedlist, sorthere=false);
-        @rput pedlist;
+        #pedlist,idtable = read_ped(pedfilePath);
+        #A = get_nrm(pedlist, sorthere=false);
+        #@rput pedlist;
 
-        R"xx <- unlist(pedlist[2:length(pedlist)])";
-        R"xx <- xx[order(xx)]";
-        R"idA <- names(xx)[which(xx == 1) : length(xx)]";
-        @rget idA;
+        #R"xx <- unlist(pedlist[2:length(pedlist)])";
+        #R"xx <- xx[order(xx)]";
+        #R"idA <- names(xx)[which(xx == 1) : length(xx)]";
+        #@rget idA;
+        
+        @rget ped; 
+        
+        A = computeA(ped[:,1], ped[:,2], ped[:, 3])
+        
 
 
         @rget M;
