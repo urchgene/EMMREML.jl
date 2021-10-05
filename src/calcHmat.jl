@@ -11,7 +11,7 @@ using EMMREML, PedigreeBase, NamedArrays
 function computeA(Progeny, Sire, Dam)
 
   n = length(Progeny);
-  A = Diagonal(n);
+  A = zeros(n,n) + I;
 
 for i in 1:n
 
