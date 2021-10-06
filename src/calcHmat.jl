@@ -57,7 +57,7 @@ function Hmat(tau, omega; input="input.Rdata", wtedG=false)
         #R"idA <- names(xx)[which(xx == 1) : length(xx)]";
         #@rget idA;
         
-        @rget ped; @rget pednames; @rget pednum;
+        @rget ped; @rget pednames; @rget pednum; @rget linenames; # Linenames ensure only Ped that has data is used for analysis...
         idA = pednames; @rput idA;
         
         A = computeA(Int64.(ped[:,1]), Int64.(ped[:,2]), Int64.(ped[:, 3]))
