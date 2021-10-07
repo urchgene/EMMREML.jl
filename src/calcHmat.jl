@@ -65,7 +65,7 @@ function Hmat(tau, omega; input="input.Rdata", wtedG=false)
   
         ##### Only use pedigree individuals that has data
         A = A[linenames, linenames];
-
+        idA = linenames; ## idA becomes linenames - a subset of only ped with phenos
 
         @rget M;
         R"idG <- as.character(rownames(M))"; @rget idG;
