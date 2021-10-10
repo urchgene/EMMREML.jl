@@ -74,7 +74,7 @@ optimout = optimize(od, lower, upper, ones(nvar), Fminbox(inner_optimizer), Opti
 deltahat = Optim.minimizer(optimout);
 deltahat = reshape(deltahat)[1];
 #Hinvhat = pinv(ZKZt + (deltahat * spI));
-Hinvhat = ldlt(Positive, (ZKZt + (deltahat * spI))); Hinvhat = inv(Hinvhat);
+Hinvhat = cholesky(Positive, (ZKZt + (deltahat * spI))); Hinvhat = inv(Hinvhat);
 XtHinvhat = X'Hinvhat;
 #betahat = XtHinvhat * X \ XtHinvhat * y;
 #### Do cholesky solve for betahat
@@ -96,7 +96,7 @@ P = Vinv - Vinv * X * jjj;
 varuhat = sigmausqhat.^2 * ZK'P * ZK;
 PEVuhat = sigmausqhat * K - varuhat;
 #varbetahat = pinv(X'Vinv * X);
-varbetahat = ldlt(Positive, (X'Vinv * X)); varbetahat = inv(varbetahat);
+varbetahat = cholesky(Positive, (X'Vinv * X)); varbetahat = inv(varbetahat);
 
 #uhat = hcat(linenames, uhat); uhat = convert(DataFrame, uhat);
 uhat = DataFrame(Lines=linenames, Uhat=uhat);
