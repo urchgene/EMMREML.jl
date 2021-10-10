@@ -25,7 +25,7 @@ ZK = Z*K;
 offset = 0.000001;
 ZKZt = ZK*Z';
 ZKZtandoffset = ZKZt + (offset * I);
-SZKZtSandoffset = (S * ZKZtandoffset)*S;
+SZKZtSandoffset = Matrix((S * ZKZtandoffset)*S);
 
 ### Change to use SVD or eigen decomposition here...
 #U, D, V = svd(SZKZtSandoffset);
@@ -34,7 +34,7 @@ SZKZtSandoffset = (S * ZKZtandoffset)*S;
 #eta = Ur'y;
 
 #### I saw svd fail ... write a try-catch later but use positive eigen for now
-D, U = eigen(Positive, Matrix(SZKZtSandoffset));
+D, U = eigen(Positive, Hermitian(SZKZtSandoffset));
 Ur = U[:, :1:(n - q)];
 lambda = D[1:(n - q)] .- offset;
 eta = Ur'y;
