@@ -34,7 +34,7 @@ SZKZtSandoffset = (S * ZKZtandoffset)*S;
 #eta = Ur'y;
 
 #### I saw svd fail ... write a try-catch later but use positive eigen for now
-D, U = eigen(Positive, SZKZtSandoffset);
+D, U = eigen(Positive, Matrix(SZKZtSandoffset));
 Ur = U[:, :1:(n - q)];
 lambda = D[1:(n - q)] .- offset;
 eta = Ur'y;
@@ -73,7 +73,8 @@ optimout = optimize(od, lower, upper, ones(nvar), Fminbox(inner_optimizer), Opti
 
 deltahat = Optim.minimizer(optimout);
 deltahat = reshape(deltahat)[1];
-Hinvhat = pinv(ZKZt + (deltahat * spI));
+#Hinvhat = pinv(ZKZt + (deltahat * spI));
+Hinvhat = ldlt(Positive, (ZKZt + (deltahat * spI))); Hinvhat = inv(Hinvhat);
 XtHinvhat = X'Hinvhat;
 #betahat = XtHinvhat * X \ XtHinvhat * y;
 #### Do cholesky solve for betahat
@@ -94,7 +95,8 @@ jjj = F \ X'Vinv;
 P = Vinv - Vinv * X * jjj;
 varuhat = sigmausqhat.^2 * ZK'P * ZK;
 PEVuhat = sigmausqhat * K - varuhat;
-varbetahat = pinv(X'Vinv * X);
+#varbetahat = pinv(X'Vinv * X);
+varbetahat = ldlt(Positive, (X'Vinv * X)); varbetahat = inv(varbetahat);
 
 #uhat = hcat(linenames, uhat); uhat = convert(DataFrame, uhat);
 uhat = DataFrame(Lines=linenames, Uhat=uhat);
