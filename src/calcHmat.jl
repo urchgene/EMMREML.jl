@@ -40,7 +40,7 @@ end
 end
 
 
-function Hmat(tau, omega; input="input.Rdata", wtedG=false) 
+function Hmat(tau, omega, M; input="input.Rdata", wtedG=false) 
 
 ## Amat & input are paths to their Rdata locations
 
@@ -67,7 +67,7 @@ function Hmat(tau, omega; input="input.Rdata", wtedG=false)
         A = A[linenames, linenames];
         idA = linenames; @rput idA; ## idA becomes linenames - a subset of only ped with phenos
 
-        @rget M;
+        #@rget M;
         R"idG <- as.character(rownames(M))"; @rget idG;
         R"idP <- unique(as.character(setdiff(linenames, idG)))"; @rget idP;
         
@@ -117,7 +117,7 @@ end
 
 #### compute Hmat differently ...
 
-function Hmat2(tau, omega; input="input.Rdata", wtedG=false) 
+function Hmat2(tau, omega, M; input="input.Rdata", wtedG=false) 
 
 
         @rput input;
@@ -159,7 +159,7 @@ function Hmat2(tau, omega; input="input.Rdata", wtedG=false)
 
         A = A[g0g1, g0g1]; # sort by ungenotyped first, then genotyped
 
-        @rget M;
+        #@rget M;
         R"idG <- rownames(M)"; @rget idG;
         #### Do wted G or not ######
 
