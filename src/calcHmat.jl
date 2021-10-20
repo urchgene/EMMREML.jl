@@ -68,6 +68,7 @@ function Hmat(tau, omega, M; input="input.Rdata", wtedG=false)
         idA = linenames; @rput idA; ## idA becomes linenames - a subset of only ped with phenos
 
         #@rget M;
+        R"if(exists('MB')){M = MB}";
         R"idG <- as.character(rownames(M))"; @rget idG;
         R"idP <- unique(as.character(setdiff(linenames, idG)))"; @rget idP;
         
@@ -160,6 +161,7 @@ function Hmat2(tau, omega, M; input="input.Rdata", wtedG=false)
         A = A[g0g1, g0g1]; # sort by ungenotyped first, then genotyped
 
         #@rget M;
+        R"if(exists('MB')){M = MB}";
         R"idG <- rownames(M)"; @rget idG;
         #### Do wted G or not ######
 
