@@ -165,3 +165,12 @@ end
 
 
 
+### example make lists using sets Julia
+#using LinearAlgebra, SparseArrays
+#primes = Set{Array{Float64,2}}()
+#Z = spzeros(3,3);
+#Z2 = sparse(ones(3,3));
+#push!(primes, Z)
+#push!(primes, Z2)
+#collect(primes)[1]
+#length(primes)
