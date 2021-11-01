@@ -154,7 +154,7 @@ uhatLong = DataFrame(Lines=namesuhat, Uhat=uhat);
 uhat = DataFrame(Lines=linenames, Uhat=GEBVs);                                            
 Vu = sigmausqhat; Ve = sigmaesqhat;  
 varuhat = diag(varuhat); varbetahat = diag(varbetahat); PEVuhat = diag(PEVuhat);
-h2 = Vu ./(Vu + Ve); rel = 1 .- (PEVuhat ./(Vu * diag(K)));
+h2 = Vu ./(Vu + Ve); rel_long = 1 .- (PEVuhat ./(Vu * diag(K))); rel = reshape(rel_long, (ic1,lz)); rel = sum(rel, dims=2);
 
 m11 =  
   Dict(
