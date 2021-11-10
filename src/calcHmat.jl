@@ -217,3 +217,67 @@ function pedMat(input)
 
 end
 
+
+
+function HmatNet(tau, omega, M, N; input="input.Rdata") 
+
+## make sure rows of N & M match same individuals...
+
+        @rput input;
+        R"load(input)";
+        
+        
+        @rget ped; @rget pednames; @rget pednum; @rget linenames; # Linenames ensure only Ped that has data is used for analysis...
+        idA = pednames; @rput idA;
+        
+        A = computeA(Int64.(ped[:,1]), Int64.(ped[:,2]), Int64.(ped[:, 3]))
+        A = NamedArray(A, (idA, idA));
+  
+        ##### Only use pedigree individuals that has data
+        A = A[linenames, linenames];
+        idA = linenames; @rput idA; ## idA becomes linenames - a subset of only ped with phenos
+
+        R"if(exists('MB')){M = MB}";
+        R"idG <- as.character(rownames(M))"; @rget idG;
+        R"idP <- unique(as.character(setdiff(linenames, idG)))"; @rget idP;
+        
+  
+        A11 = A[idP, idP];
+        A12 = A[idP, idG];
+        A21 = A12';
+        A22 = A[idG, idG];
+  
+        sorted = vcat(idP, idG);
+        A = A[sorted, sorted];
+
+        #### Do wted G or not ######
+  
+  
+        N = Matrix(N); KN = DOM(N);
+
+        M = Matrix(M); KM =  GRM(M);
+
+        G = KM + KN; #sum networks and GRM
+
+
+        G = NamedArray(G, (idG, idG));
+
+        G22 = G;
+
+        A22inv = inv(cholesky(Positive, A22)); A22inv = NamedArray(A22inv, (idG, idG));
+        G22inv = inv(cholesky(Positive, G22)); G22inv = NamedArray(G22inv, (idG, idG));
+        H22 = inv(cholesky(Positive, (tau * G22inv) + ((1 - omega) * A22inv))); H22 = NamedArray(H22, (idG, idG));
+        H11 = A12 * A22inv * (H22 - A22) * A22inv * A21;
+        H12 = A12 * A22inv * (H22 - A22);
+        H21 = (H22 - A22) * A22inv * A21;
+        H22 = (H22 - A22);
+        nom1 = vcat(names(A11,1), names(A21, 1)); nom2 = vcat(names(A11,2), names(A12, 2));
+        H = A + hcat(vcat(H11, H21), vcat(H12, H22));
+        H = 0.90*H + 0.1*I;
+        H = NamedArray(H, (nom1, nom2));
+        H = H[linenames, linenames];
+
+        return(Dict(:H => H,:names => linenames))
+
+end
+
