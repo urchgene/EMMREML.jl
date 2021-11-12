@@ -307,7 +307,7 @@ function HmatEpis(tau, omega, M, N; input="input.Rdata")
 
         #### Do wted G or not ######
   
-        pieces = size(M,2)/10;
+        pieces = Int64.(round(size(M,2)/10));
 
         N = Matrix(N); KN = N * N';
 
