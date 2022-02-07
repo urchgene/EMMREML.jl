@@ -104,7 +104,7 @@ function emmremlMultivariate(Y, X, Z, K)
     n = size(Y', 1)
     ZKZt = Z*K*Z'
     R = zeros(n,n) + I; R = kron(R, Vet);
-    V = R + kron(ZKZt, Vgt)
+    V = R + kron(ZKZt, Vgt); V = V + 0.001*I;
     XB = X'*Bt';
     LL = MvNormal(vec(XB), Symmetric(V));
     loglik = logpdf(LL, vec(Y));
