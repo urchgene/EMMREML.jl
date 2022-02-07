@@ -55,7 +55,7 @@ function emmremlMultivariate(Y, X, Z, K)
         N = size(K,1)
         KZt = K * Z'
         ZKZt = Z * KZt
-        ZKZt  = ZKZt + 0.0001*I;
+        ZKZt  = Matrix(ZKZt + 0.0001*I);
         #eigZKZt = eigen(ZKZt)
 	eigZKZt = eigen(Positive, Hermitian(ZKZt));
 	U = reverse(eigZKZt.vectors, dims=2); 
