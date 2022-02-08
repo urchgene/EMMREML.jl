@@ -8,7 +8,7 @@
 
 
 using LinearAlgebra;
-using Distributions;
+using Distributions, AltDistributions;
 using Statistics, PositiveFactorizations;
 
 #BLAS.set_num_threads(20)
@@ -104,9 +104,11 @@ function emmremlMultivariate(Y, X, Z, K)
     n = size(Y', 1)
     ZKZt = Z*K*Z'
     R = zeros(n,n) + I; R = kron(R, Vet);
-    V = R + kron(ZKZt, Vgt); V = V + 0.001*I;
+    V = R + kron(ZKZt, Vgt); V = V + 0.001*I; VL = Matrix(cholesky(Positive, V).L);
     XB = X'*Bt';
-    LL = MvNormal(vec(XB), Symmetric(V));
+    #LL = MvNormal(vec(XB), Symmetric(V));
+    #loglik = logpdf(LL, vec(Y));
+    LL = AltMvNormal(Val(:L), vec(XB), VL);
     loglik = logpdf(LL, vec(Y));
 
     ### Write ouput in R for pretty compatible format
