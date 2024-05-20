@@ -11,6 +11,17 @@ using Optim;
 using ForwardDiff, PositiveFactorizations;
 using LinearAlgebra, DataFrames;
 
+"""
+Single kernel single trait solver for EMMA algorithm.
+Function call: emmreml(y, X, Z, K, linenames)
+
+y is trait vector, 
+X and Z are design matrices for fixed and random effetcs
+K is Known covariance matrix
+linenames is a character vec for lines in order of colnames of Z or col/row (names)of K. 
+
+This is a fast solver with ability to handle a good chunk of data.
+"""
 function emmreml(y, X, Z, K, linenames)
 
 q = size(X,2);
