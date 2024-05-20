@@ -15,6 +15,21 @@ using Statistics, PositiveFactorizations;
 #my_BLAS_set_num_threads(n) =  ccall((:openblas_set_num_threads64_, Base.libblas_name), Cvoid, (Int32,), n)
 #my_BLAS_set_num_threads(20)
 
+"""
+Multi-trait single kernel VCOMP solver for EMMA algorithm. Very useful for 2-step procedures.
+Assumes same fixed effect components for all traits...
+No missing values allowed in Y trait matrix
+
+Function call: emmremlMultivariate(Y, X, Z, K, linenames)
+
+Y is (nxd) trait matrix for d traits and n records, 
+X (nxq) and Z (nxl) are design matrices for (q) fixed and (l) individuals in random effetcs
+K (lxl) is Known covariance matrix
+linenames is a character vec for individuals in order of colnames of Z or col/row (names)of K. 
+
+This is a fast solver with ability to handle a good chunk of data.
+"""
+
 function emmremlMultivariate(Y, X, Z, K)
 
 ## call with regular Y, X, K but transpose Z ###
